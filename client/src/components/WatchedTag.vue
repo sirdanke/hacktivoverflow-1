@@ -74,14 +74,6 @@ export default {
   },
   watch: {
     tags(v) {
-      //   console.log(v);
-
-      //       let data = []
-      //       v.forEach(e => {
-      //       let obj = {}
-      //           obj.text = e
-      //           data.push(obj)
-      //       });
       axios
         .patch(
           "/users/updateTag",
@@ -94,7 +86,6 @@ export default {
         )
         .then(({ data }) => {
           this.suggestionPost = data;
-          console.log(data, "===data fetch");
         })
         .catch(err => {
           console.log(err);
@@ -138,12 +129,7 @@ export default {
         path: `posting/${posting._id}/${index}`
       });
     },
-    updateTag() {
-      console.log("masuk sini");
-    },
     getSuggestion(v) {
-      console.log(v);
-
       axios
         .patch(
           "/users/updateTag",
@@ -156,7 +142,6 @@ export default {
         )
         .then(({ data }) => {
           this.suggestionPost = data;
-          console.log(data, "===data fetch");
         })
         .catch(err => {
           console.log(err);

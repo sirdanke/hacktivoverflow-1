@@ -53,7 +53,6 @@ export default {
           }
         )
         .then(({ data }) => {
-          console.log(data, "===");
           this.newAnswer = ''
             data.data.user = data.user
           this.$emit('newdata', data.data)

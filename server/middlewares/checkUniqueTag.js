@@ -2,8 +2,7 @@ const Tag = require('../models/tag')
 
 
 function cekUniqTag(req, res, next) {
-    console.log(req.body, "====in reqbody tags");
-    
+
     let tagId = []
     let promises = []
     req.body.tags.forEach(e => {
@@ -44,8 +43,6 @@ function cekUniqTag(req, res, next) {
             } 
             return Promise.all(promisesCreate)
             .then(data => {
-                console.log('data didalam uniqe tags');
-                
                 let tagToInput = tagId.concat(data)
                 req.tags = tagToInput
                 next()
@@ -53,7 +50,6 @@ function cekUniqTag(req, res, next) {
             })
         })
         .catch(err => {
-            console.log(err, "=========");
             next()
         })
 }

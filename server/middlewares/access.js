@@ -4,8 +4,6 @@ const Users = require('../models/users')
 
 function access(req,res,next) {
     try {
-        console.log(req.headers.token,"==token");
-        
         let decoded = jwt.verify(req.headers.token, process.env.JWTTOKEN)
         Users
             .findOne({ _id: decoded.id })
@@ -15,14 +13,10 @@ function access(req,res,next) {
                 next()
             })
             .catch(err => {
-                console.log(err, "==eroorr");
-                
                 res.status(500).json({ message: 'internal server error', error: err })
             })
 
     } catch (err) {
-        console.log(err,"============eror id verifiacation");
-        // next(err)
         res.status(402).json({ message: "you're not authorize for this session" })
     }
 }

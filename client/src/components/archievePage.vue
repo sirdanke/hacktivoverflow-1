@@ -81,17 +81,6 @@ export default {
   created() {
     this.getUserPostings();
   },
-  // computed : {
-  //   allPostings : {
-
-  //   }
-  //   }
-  // },
-  // watch : {
-  //   "this.$store.state.allPostings"(v) {
-
-  //   }
-  // },
   methods: {
     selectedPosting(posting, index) {
       this.$router.push({
@@ -130,11 +119,8 @@ export default {
                   }
                 })
                 .then(() => {
-                  console.log(this.userPostings);
 
                   let data = this.userPostings.filter(function(a) {
-                    console.log(a._id, post._id);
-
                     return a._id !== post._id;
                   });
                   this.userPostings = data;

@@ -98,16 +98,6 @@
                     >
                       <i class="fas fa-edit"></i>
                     </button>
-
-                    <!-- <button
-                    v-if="user == answer.user._id || user == answer.user"
-                    class="btn btn-primary"
-                    style="margin:5px"
-                    type="button"
-                    data-toggle="modal"
-                    data-target="#exampleModalLong2"
-                    @click="editAnswer(answer, index)"
-                    >edit your answer</button>-->
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -158,8 +148,6 @@ export default {
   },
   methods: {
     refreshData(payload) {
-      console.log(payload, "====ni comment baru");
-
       this.selectedPosting.answers.push(payload);
     },
 
@@ -167,8 +155,6 @@ export default {
       this.selectedAnswer = answer;
     },
     addVotePosting(post, index, command) {
-      console.log("masuk sini");
-
       let currentUser = localStorage.getItem("user");
 
       let upvoter = false;

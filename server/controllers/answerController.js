@@ -22,15 +22,7 @@ module.exports = {
                             }
                         }, { new: true })
                     .then(data => {
-                        console.log(req.author);
-
                         newAnswer.user = req.author
-                        // console.log(data);
-
-                        // console.log(newAnswer);
-                        console.log(newAnswer.user);
-
-
                         res.status(201).json({ data: newAnswer, user: req.author })
                     })
             })
@@ -83,8 +75,6 @@ module.exports = {
                     $set: req.body
                 }, { new: true })
             .then(data => {
-                console.log(data);
-
                 res.status(201).json({ data: data, user: req.author })
             })
             .catch(err => {

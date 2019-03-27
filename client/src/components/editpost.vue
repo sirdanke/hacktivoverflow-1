@@ -111,8 +111,6 @@ export default {
       // this.tags = this.selectedPost.tags.map(a => a.name);
     },
     updatePost() {
-      console.log(this.tags);
-
       axios
         .put(
           `/postings/${this.selectedPost._id}`,
@@ -128,8 +126,7 @@ export default {
           }
         )
         .then(data => {
-          console.log(data, "==ini data");
-          
+
           this.$store.dispatch('editPost', data)
           this.selectedPost = data;
           swal("data updated");

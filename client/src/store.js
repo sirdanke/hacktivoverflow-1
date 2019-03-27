@@ -66,7 +66,6 @@ export default new Vuex.Store({
       router.push(`/search/${payload}`)
     },
     editData(state, payload) {
-      console.log(payload.data, "======ini payload");
       let index
       state.allPostings.forEach((post,i) => {
         if(post._id == payload.data._id) {

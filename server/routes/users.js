@@ -13,6 +13,4 @@ router.patch('/updateTag',access, cekUniqueTag, userController.updateTag)
 
 router.post('/login', userController.login)
 
-router.post('/watchedTag',access, userController.addWatchedTag)
-
 module.exports = router;
