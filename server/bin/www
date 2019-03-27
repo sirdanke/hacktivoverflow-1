@@ -1,0 +1,172 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+
+
+
+var app = require('../app');
+var debug = require('debug')('server:server');
+var http = require('http');
+const kue = require('kue')
+const queue = kue.createQueue()
+const User = require('../models/users')
+const Tag = require('../models/tag')
+const sendEmail = require('../helpers/sendEmail')
+const cron = require('node-cron');
+const axios = require('axios')
+
+
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+
+let schedule = '* * * * *'
+
+let realSchedule = '1 7 * * 1'
+
+cron.schedule(realSchedule, () => {
+      let promises = []
+      Tag
+        .find()
+        .then(data => {
+          data.forEach(a => {
+            queue.create('updateTagJob', {
+              process : axios
+                        .get(`https://jobs.github.com/positions.json?description=${a.name}`)
+                        .then(({data})=>{  
+            
+                                a.job = data.slice(0,5)
+                                return a.save()
+                              
+                        })
+                        .then(data => {
+                          console.log(data);
+                          
+                          // next()
+                        })
+                        .catch(({response})=> {
+                                // err = response
+                                // next(err)
+                        })
+                      }).save()
+            })
+
+          //  data.push(  
+        })
+
+      //   Promise.all(promises)
+      //   .then(data => {
+      //     console.log(data);
+          
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+          
+      //   })
+      // // User
+      //   .find()
+      //   .populate('watchedTag')
+      //   .then(users => {
+      //     console.log(users);
+          
+          // users.forEach(user => {
+          //   queue.create('send-email', {
+          //     email : user.email
+          //   }).save()
+          // })
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+          
+      //   })
+});
+
+queue.process('send-email', (job,done) => {
+  // // console.log(job.data);
+  // sendEmail(job.email)
+          job.data.process
+          done()
+  
+})
